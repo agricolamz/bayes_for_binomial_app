@@ -1,13 +1,10 @@
 library(shiny)
-library(dplyr)
-library(ggplot2)
-
+suppressPackageStartupMessages(library(tidyverse))
 
 shinyServer(function(input, output) {
     x <- seq(0, 1, length = 100)
     
     prop_model <- function(data = c(), prior_prop = c(1, 1), n_draws = 10000) {
-        library(tidyverse)
         data <- as.logical(data)
 
         # dens_curves will be a data frame with the x & y coordinates for the 
@@ -29,7 +26,7 @@ shinyServer(function(input, output) {
         p <- ggplot(dens_curves, aes(x = proportion_success, y = label,
                                      height = probability, fill = value)) +
             ggridges::geom_density_ridges(stat="identity", color = "white", alpha = 0.8,
-                                          panel_scaling = TRUE, size = 1) +
+                                          panel_scaling = TRUE) +
             scale_y_discrete("", expand = c(0.01, 0)) +
             scale_x_continuous("Underlying proportion of success") +
             scale_fill_manual(values = hcl(120 * 2:0 + 15, 100, 65), name = "", drop = FALSE,
